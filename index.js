@@ -53,8 +53,7 @@ app.use('/api', middleWare, route); // Combine JSON Server into the same port
 // Static folder for serving uploaded files
 app.use('/uploads', express.static('uploads'));
 
-// Endpoint for file upload
-app.post('/uploads', upload.single('profilePic'), (req, res) => {
+app.post('/uploads', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }

@@ -5,28 +5,32 @@
       "email": "ronit@gmail.com",
       "password": "12345678",
       "id": 3,
-      "profilePic": "1733948054789-pexels-cottonbro-9694216.jpg"
+      "profilePic": "1734105001981-ABM14.jpg",
+      "chatWallpaper": "download (1).jpg"
     },
     {
       "userName": "Ronit Philip",
       "email": "ronit3126p@gmail.com",
       "password": "123456789",
       "id": 4,
-      "profilePic": "1733945577572-pexels-cottonbro-9694216.jpg"
+      "profilePic": "1733945577572-pexels-cottonbro-9694216.jpg",
+      "chatWallpaper": ""
     },
     {
       "userName": "Ronit2",
       "email": "ronit2@gmail.com",
       "password": "12345678",
       "id": 5,
-      "profilePic": "1733945577572-pexels-cottonbro-9694216.jpg"
+      "profilePic": "1733945577572-pexels-cottonbro-9694216.jpg",
+      "chatWallpaper": ""
     },
     {
       "userName": "Ronit3",
       "email": "ronit3@gmail.com",
       "password": "1234567890",
       "id": 6,
-      "profilePic": "1733945577572-pexels-cottonbro-9694216.jpg"
+      "profilePic": "1733945577572-pexels-cottonbro-9694216.jpg",
+      "chatWallpaper": ""
     }
   ]
 }
