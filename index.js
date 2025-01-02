@@ -30,12 +30,15 @@ const upload = multer({
 // Socket.IO server
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
-  cors: {
-    origin: process.env.frontEndURL,
-    methods: ["GET", "POST"],
-  },
+    cors: {
+      origin: process.env.frontEndURL,
+        methods: ["GET", "POST"],
+    },
 });
+
+const users = {}; // Map to store connected users and their IDs
 
 // Enable CORS for all routes
 app.use(
@@ -72,25 +75,47 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
-  // Listen for login event and join user-specific room
-  socket.on('login', (userId) => {
-    console.log(`User logged in with ID: ${userId}`);
-    socket.join(userId);
+  // Listen for user registration
+  socket.on('register', (userId) => {
+      users[userId] = socket.id;
+      console.log(`User login: ${userId}`);
+      io.emit('user_status_change', { userId, status: 'online' });
   });
 
-  // Listen for message event
-  socket.on('sendMessage', ({ toUserId, message }) => {
-    try {
-      console.log(`Message from ${socket.id} to ${toUserId}: ${message}`);
-      io.to(toUserId).emit('receiveMessage', { fromUserId: socket.id, message });
-    } catch (error) {
-      console.error('Error handling sendMessage:', error);
+  // Listen for private messages
+  socket.on('private_message', (data) => {
+    const { sender, receiver, messageBody } = data;
+    const receiverSocketId = users[receiver]; // Get the receiver's socket ID
+
+    if (receiverSocketId) {
+        io.to(receiverSocketId).emit('private_message', {
+            sender,
+            receiver,
+            messageBody,
+        });
+    } else {
+        console.log(`Receiver ${receiver} not connected`);
     }
-  });
 
-  // Handle disconnection
+    // Emit the message back to the sender as well, so it can display their own messages
+    io.to(socket.id).emit('private_message', {
+        sender,
+        receiver,
+        messageBody,
+    });
+});
+
+  // Handle disconnect
   socket.on('disconnect', () => {
-    console.log('A user disconnected:', socket.id);
+      console.log('A user disconnected:', socket.id);
+      for (const [userId, socketId] of Object.entries(users)) {
+          if (socketId === socket.id) {
+              delete users[userId];
+
+              io.emit('user_status_change', { userId, status: 'offline' });
+              break;
+          }
+      }
   });
 });
 
